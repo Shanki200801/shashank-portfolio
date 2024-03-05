@@ -4,8 +4,9 @@ import { useSelectedLayoutSegment } from "next/navigation";
 import React from "react";
 
 const Navbar = () => {
+  const selectedLayoutSegment = useSelectedLayoutSegment();
   const isActive = (href: string | null) => {
-    return useSelectedLayoutSegment() === href ? "text-blue-700" : "";
+    return selectedLayoutSegment === href ? "text-blue-700" : "";
   };
   return (
     <header className="flex flex-row justify-start py-4 items-center w-full">
