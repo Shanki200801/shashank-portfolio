@@ -20,7 +20,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="fixed left-4 bottom-0 z-10 hidden md:block">
+    <div className="fixed left-4 bottom-0 z-0 hidden md:block pointer-events-none">
       <div className="flex flex-col items-center space-y-4">
         {socialLinks.map((link) => (
           <a
@@ -28,7 +28,7 @@ const Sidebar = () => {
             href={link.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2 text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors duration-200"
+            className="p-2 text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors duration-200 pointer-events-auto"
             aria-label={link.name}
           >
             {link.icon}
