@@ -1,3 +1,5 @@
+"use client";
+
 import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
 
 const Sidebar = () => {
@@ -14,7 +16,7 @@ const Sidebar = () => {
     },
     {
       name: 'Twitter',
-      url: 'https://twitter.com',
+      url: 'https://twitter.com/shashank200801',
       icon: <FaTwitter className="w-5 h-5" />,
     },
   ];
