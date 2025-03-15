@@ -5,7 +5,6 @@ import rehypeRaw from 'rehype-raw';
 import rehypeHighlight from 'rehype-highlight';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Components } from 'react-markdown';
 
 interface MarkdownRendererProps {
   content: string;
@@ -38,7 +37,19 @@ const MarkdownRenderer = ({ content }: MarkdownRendererProps) => {
                 </span>
               );
             }
-            return <img {...props} alt={props.alt || ''} />;
+            // Use Image component instead of img for better performance
+            return (
+              <span className="block relative w-full h-auto min-h-[200px] my-4 bg-gray-200 dark:bg-gray-800 rounded-lg overflow-hidden">
+                <Image
+                  src={props.src || ''}
+                  alt={props.alt || ''}
+                  fill
+                  className="object-contain"
+                  sizes="(max-width: 640px) 100vw, (max-width: 768px) 90vw, (max-width: 1024px) 80vw, 75vw"
+                  unoptimized
+                />
+              </span>
+            );
           },
           a: ({ ...props }) => {
             const { href, children } = props;
@@ -47,7 +58,7 @@ const MarkdownRenderer = ({ content }: MarkdownRendererProps) => {
             }
             return <a target="_blank" rel="noopener noreferrer" {...props} />;
           },
-          // @ts-ignore - The inline property is provided by react-markdown
+          // @ts-expect-error - The inline property is provided by react-markdown but not included in the type definitions
           code: ({ inline, className, children, ...props }) => {
             if (inline) {
               return (

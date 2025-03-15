@@ -15,34 +15,53 @@ interface FormErrors {
   message?: string;
 }
 
+interface SubmitStatus {
+  success?: boolean;
+  message?: string;
+}
+
 const ContactForm = () => {
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
     message: '',
   });
-  
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<{
-    success?: boolean;
-    message?: string;
-  }>({});
-  
+  const [submitStatus, setSubmitStatus] = useState<SubmitStatus | null>(null);
+
+  const { name, email, message } = formData;
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+    
+    // Clear error for this field when user starts typing
+    if (errors[name as keyof FormErrors]) {
+      setErrors({
+        ...errors,
+        [name]: undefined,
+      });
+    }
+  };
+
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
     
-    if (!formData.name.trim()) {
+    if (!name.trim()) {
       newErrors.name = 'Name is required';
     }
     
-    if (!formData.email.trim()) {
+    if (!email.trim()) {
       newErrors.email = 'Email is required';
-    } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
+    } else if (!/^\S+@\S+\.\S+$/.test(email)) {
       newErrors.email = 'Email is invalid';
     }
     
-    if (!formData.message.trim()) {
+    if (!message.trim()) {
       newErrors.message = 'Message is required';
     }
     
@@ -50,15 +69,7 @@ const ContactForm = () => {
     return Object.keys(newErrors).length === 0;
   };
   
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-  
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     if (!validateForm()) {
@@ -66,6 +77,7 @@ const ContactForm = () => {
     }
     
     setIsSubmitting(true);
+    setSubmitStatus(null);
     
     try {
       const response = await fetch('/api/contact', {
@@ -73,128 +85,115 @@ const ContactForm = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name,
+          email,
+          message,
+        }),
       });
       
-      const data = await response.json();
-      
       if (response.ok) {
-        setSubmitStatus({
-          success: true,
-          message: 'Your message has been sent successfully!',
-        });
-        
-        // Reset form
+        setSubmitStatus({ success: true, message: 'Message sent successfully!' });
         setFormData({
           name: '',
           email: '',
           message: '',
         });
+        setErrors({});
       } else {
-        setSubmitStatus({
-          success: false,
-          message: data.message || 'Something went wrong. Please try again.',
-        });
+        setSubmitStatus({ success: false, message: 'Something went wrong. Please try again.' });
       }
-    } catch (_) {
-      // Using underscore to indicate intentionally unused variable
-      setSubmitStatus({
-        success: false,
-        message: 'An error occurred. Please try again later.',
-      });
+    } catch {
+      // No need to use the error variable
+      setSubmitStatus({ success: false, message: 'Something went wrong. Please try again.' });
     } finally {
       setIsSubmitting(false);
     }
   };
-  
+
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 md:p-8">
-      <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Get in Touch</h2>
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label htmlFor="name" className="block text-sm font-medium mb-1">
+          Name
+        </label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          value={name}
+          onChange={handleChange}
+          className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+            errors.name ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'
+          } bg-white dark:bg-gray-800`}
+          disabled={isSubmitting}
+        />
+        {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
+      </div>
       
-      {submitStatus.message && (
-        <div 
-          className={`mb-6 p-4 rounded-md ${
-            submitStatus.success 
-              ? 'bg-green-100 text-green-800 dark:bg-green-800/20 dark:text-green-400' 
-              : 'bg-red-100 text-red-800 dark:bg-red-800/20 dark:text-red-400'
-          }`}
-        >
+      <div>
+        <label htmlFor="email" className="block text-sm font-medium mb-1">
+          Email
+        </label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          value={email}
+          onChange={handleChange}
+          className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+            errors.email ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'
+          } bg-white dark:bg-gray-800`}
+          disabled={isSubmitting}
+        />
+        {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
+      </div>
+      
+      <div>
+        <label htmlFor="message" className="block text-sm font-medium mb-1">
+          Message
+        </label>
+        <textarea
+          id="message"
+          name="message"
+          value={message}
+          onChange={handleChange}
+          rows={5}
+          className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+            errors.message ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'
+          } bg-white dark:bg-gray-800`}
+          disabled={isSubmitting}
+        />
+        {errors.message && <p className="mt-1 text-sm text-red-500">{errors.message}</p>}
+      </div>
+      
+      <button
+        type="submit"
+        className="w-full flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        disabled={isSubmitting}
+      >
+        {isSubmitting ? (
+          <span className="flex items-center">
+            <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Sending...
+          </span>
+        ) : (
+          <span className="flex items-center">
+            Send Message
+            <FaPaperPlane className="ml-2" />
+          </span>
+        )}
+      </button>
+      
+      {submitStatus && (
+        <div className={`mt-4 p-3 rounded-md ${submitStatus.success ? 'bg-green-100 text-green-800 dark:bg-green-800/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-800/30 dark:text-red-400'}`}>
           {submitStatus.message}
         </div>
       )}
-      
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Name
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:outline-none dark:bg-gray-800 dark:border-gray-700 dark:text-white ${
-              errors.name ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-indigo-200 dark:focus:ring-indigo-600'
-            }`}
-          />
-          {errors.name && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.name}</p>}
-        </div>
-        
-        <div className="mb-4">
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:outline-none dark:bg-gray-800 dark:border-gray-700 dark:text-white ${
-              errors.email ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-indigo-200 dark:focus:ring-indigo-600'
-            }`}
-          />
-          {errors.email && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.email}</p>}
-        </div>
-        
-        <div className="mb-6">
-          <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Message
-          </label>
-          <textarea
-            id="message"
-            name="message"
-            rows={5}
-            value={formData.message}
-            onChange={handleChange}
-            className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:outline-none dark:bg-gray-800 dark:border-gray-700 dark:text-white ${
-              errors.message ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-indigo-200 dark:focus:ring-indigo-600'
-            }`}
-          ></textarea>
-          {errors.message && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.message}</p>}
-        </div>
-        
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-300 flex items-center justify-center disabled:opacity-70"
-        >
-          {isSubmitting ? (
-            <span>Sending...</span>
-          ) : (
-            <>
-              <FaPaperPlane className="mr-2" />
-              <span>Send Message</span>
-            </>
-          )}
-        </button>
-        
-        <p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
-          I&apos;ll get back to you as soon as possible!
-        </p>
-      </form>
-    </div>
+    </form>
   );
 };
 

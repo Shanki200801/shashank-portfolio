@@ -6,7 +6,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { Metadata } from 'next';
 
 // Define the params type
-type Params = {
+interface Params {
   slug: string;
 }
 
@@ -14,9 +14,9 @@ type Params = {
 export async function generateMetadata({
   params,
 }: {
-  params: Params;
+  params: Promise<Params>;
 }): Promise<Metadata> {
-  const slug = params.slug;
+  const { slug } = await params;
   const { frontmatter } = getBlogData(`${slug}.md`);
   
   return {
@@ -25,7 +25,7 @@ export async function generateMetadata({
   };
 }
 
-export function generateStaticParams(): Array<Params> {
+export function generateStaticParams(): Array<{ slug: string }> {
   const files = getBlogFiles();
   
   return files.map((filename) => ({
@@ -33,13 +33,16 @@ export function generateStaticParams(): Array<Params> {
   }));
 }
 
+interface BlogPageProps {
+  params: Promise<Params>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}
+
 // Use the correct Next.js page props type
-export default function BlogPage({
+export default async function BlogPage({
   params,
-}: {
-  params: Params;
-}) {
-  const slug = params.slug;
+}: BlogPageProps) {
+  const { slug } = await params;
   const { frontmatter, content } = getBlogData(`${slug}.md`);
   const { title, date, image } = frontmatter;
   

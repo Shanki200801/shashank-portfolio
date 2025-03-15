@@ -6,7 +6,7 @@ import { FaGithub, FaExternalLinkAlt, FaArrowLeft } from 'react-icons/fa';
 import { Metadata } from 'next';
 
 // Define the params type
-type Params = {
+interface Params {
   slug: string;
 }
 
@@ -14,9 +14,9 @@ type Params = {
 export async function generateMetadata({
   params,
 }: {
-  params: Params;
+  params: Promise<Params>;
 }): Promise<Metadata> {
-  const slug = params.slug;
+  const { slug } = await params;
   const { frontmatter } = getProjectData(`${slug}.md`);
   
   return {
@@ -25,7 +25,7 @@ export async function generateMetadata({
   };
 }
 
-export function generateStaticParams(): Array<Params> {
+export function generateStaticParams(): Array<{ slug: string }> {
   const files = getProjectFiles();
   
   return files.map((filename) => ({
@@ -33,13 +33,16 @@ export function generateStaticParams(): Array<Params> {
   }));
 }
 
+interface ProjectPageProps {
+  params: Promise<Params>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}
+
 // Use the correct Next.js page props type
-export default function ProjectPage({
+export default async function ProjectPage({
   params,
-}: {
-  params: Params;
-}) {
-  const slug = params.slug;
+}: ProjectPageProps) {
+  const { slug } = await params;
   const { frontmatter, content } = getProjectData(`${slug}.md`);
   const { title, date, techStack, sourceLink, demoLink, image } = frontmatter;
   
