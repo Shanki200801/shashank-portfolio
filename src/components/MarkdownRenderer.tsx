@@ -5,17 +5,10 @@ import rehypeRaw from 'rehype-raw';
 import rehypeHighlight from 'rehype-highlight';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Components } from 'react-markdown';
 
 interface MarkdownRendererProps {
   content: string;
-}
-
-// Define the code component props type
-interface CodeProps {
-  inline?: boolean;
-  className?: string;
-  children: React.ReactNode;
-  [key: string]: any;
 }
 
 const MarkdownRenderer = ({ content }: MarkdownRendererProps) => {
@@ -54,7 +47,8 @@ const MarkdownRenderer = ({ content }: MarkdownRendererProps) => {
             }
             return <a target="_blank" rel="noopener noreferrer" {...props} />;
           },
-          code: ({ inline, className, children, ...props }: CodeProps) => {
+          // @ts-ignore - The inline property is provided by react-markdown
+          code: ({ inline, className, children, ...props }) => {
             if (inline) {
               return (
                 <code className="bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded text-sm" {...props}>
