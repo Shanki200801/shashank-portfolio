@@ -32,7 +32,7 @@ export function generateStaticParams() {
 export default async function ProjectPage({ params }: ProjectPageProps) {
   const slug = params.slug;
   const { frontmatter, content } = getProjectData(`${slug}.md`);
-  const { title, description, date, techStack, sourceLink, demoLink, image } = frontmatter;
+  const { title, date, techStack, sourceLink, demoLink, image } = frontmatter;
   
   // Format the date
   const formattedDate = new Date(date).toLocaleDateString('en-US', {

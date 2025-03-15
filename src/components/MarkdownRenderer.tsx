@@ -16,7 +16,7 @@ const MarkdownRenderer = ({ content }: MarkdownRendererProps) => {
       <ReactMarkdown
         rehypePlugins={[rehypeRaw, rehypeHighlight]}
         components={{
-          img: ({ node, ...props }) => {
+          img: ({ ...props }) => {
             const { src, alt } = props;
             if (src) {
               // Handle both absolute URLs and relative paths
@@ -37,16 +37,16 @@ const MarkdownRenderer = ({ content }: MarkdownRendererProps) => {
                 </span>
               );
             }
-            return <img {...props} />;
+            return <img {...props} alt={props.alt || ''} />;
           },
-          a: ({ node, ...props }) => {
+          a: ({ ...props }) => {
             const { href, children } = props;
             if (href && href.startsWith('/')) {
               return <Link href={href}>{children}</Link>;
             }
             return <a target="_blank" rel="noopener noreferrer" {...props} />;
           },
-          code: ({ node, inline, className, children, ...props }) => {
+          code: ({ inline, className, children, ...props }) => {
             if (inline) {
               return (
                 <code className="bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded text-sm" {...props}>
@@ -63,17 +63,17 @@ const MarkdownRenderer = ({ content }: MarkdownRendererProps) => {
             );
           },
           // Add better styling for other markdown elements
-          h1: ({ node, ...props }) => <h1 className="text-2xl sm:text-3xl font-bold mt-6 sm:mt-8 mb-3 sm:mb-4" {...props} />,
-          h2: ({ node, ...props }) => <h2 className="text-xl sm:text-2xl font-bold mt-5 sm:mt-6 mb-3 sm:mb-4" {...props} />,
-          h3: ({ node, ...props }) => <h3 className="text-lg sm:text-xl font-bold mt-4 mb-2 sm:mb-3" {...props} />,
-          p: ({ node, ...props }) => <p className="my-3 sm:my-4 text-base sm:text-lg" {...props} />,
-          ul: ({ node, ...props }) => <ul className="list-disc pl-5 sm:pl-6 my-3 sm:my-4" {...props} />,
-          ol: ({ node, ...props }) => <ol className="list-decimal pl-5 sm:pl-6 my-3 sm:my-4" {...props} />,
-          li: ({ node, ...props }) => <li className="mb-1 text-base sm:text-lg" {...props} />,
-          blockquote: ({ node, ...props }) => (
+          h1: ({ ...props }) => <h1 className="text-2xl sm:text-3xl font-bold mt-6 sm:mt-8 mb-3 sm:mb-4" {...props} />,
+          h2: ({ ...props }) => <h2 className="text-xl sm:text-2xl font-bold mt-5 sm:mt-6 mb-3 sm:mb-4" {...props} />,
+          h3: ({ ...props }) => <h3 className="text-lg sm:text-xl font-bold mt-4 mb-2 sm:mb-3" {...props} />,
+          p: ({ ...props }) => <p className="my-3 sm:my-4 text-base sm:text-lg" {...props} />,
+          ul: ({ ...props }) => <ul className="list-disc pl-5 sm:pl-6 my-3 sm:my-4" {...props} />,
+          ol: ({ ...props }) => <ol className="list-decimal pl-5 sm:pl-6 my-3 sm:my-4" {...props} />,
+          li: ({ ...props }) => <li className="mb-1 text-base sm:text-lg" {...props} />,
+          blockquote: ({ ...props }) => (
             <blockquote className="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic my-4 text-base sm:text-lg" {...props} />
           ),
-          pre: ({ node, ...props }) => (
+          pre: ({ ...props }) => (
             <pre className="overflow-x-auto rounded-lg p-4 text-sm sm:text-base" {...props} />
           ),
         }}

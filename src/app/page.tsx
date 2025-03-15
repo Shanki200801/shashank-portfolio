@@ -18,7 +18,7 @@ export default function Home() {
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="md:w-1/2 mb-10 md:mb-0">
               <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-                Hi, I'm <span className="text-indigo-600 dark:text-indigo-400">Shashank</span>
+                Hi, I&apos;m <span className="text-indigo-600 dark:text-indigo-400">Shashank</span>
               </h1>
               <p className="text-xl text-gray-700 dark:text-gray-300 mb-8">
                 Full Stack Developer with expertise in TypeScript, Java, Python, and C#.
@@ -64,7 +64,7 @@ export default function Home() {
           </div>
           <div className="max-w-3xl mx-auto">
             <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">
-              I'm a highly skilled full-stack developer with expertise in both front-end and back-end technologies. 
+              I&apos;m a highly skilled full-stack developer with expertise in both front-end and back-end technologies. 
               Proficient in languages such as TypeScript, Java, Python, and C#. Experienced in frameworks like 
               Node.js (Express), Spring Boot, Django, Flask, React, and Redux.
             </p>
@@ -73,7 +73,7 @@ export default function Home() {
               I also have profound knowledge of cloud services like AWS and Google Cloud.
             </p>
             <p className="text-lg text-gray-700 dark:text-gray-300">
-              Currently working as a Full Stack Developer at Nimbly Technologies, where I've streamlined bulk operations, 
+              Currently working as a Full Stack Developer at Nimbly Technologies, where I&apos;ve streamlined bulk operations, 
               implemented new features, and migrated from Firebase to MongoDB + AWS for enhanced scalability.
             </p>
           </div>
