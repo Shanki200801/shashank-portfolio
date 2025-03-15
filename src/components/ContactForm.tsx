@@ -77,38 +77,23 @@ const ContactForm = () => {
     }
     
     setIsSubmitting(true);
-    setSubmitStatus(null);
     
-    try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name,
-          email,
-          message,
-        }),
+    // Instead of making an API call, just show a message after a short delay
+    setTimeout(() => {
+      setSubmitStatus({ 
+        success: true, 
+        message: 'Thanks for your interest! Until my email service is set up, please reach out to me directly at shashank200801@gmail.com or connect with me on LinkedIn or GitHub using the links on the left sidebar.' 
       });
       
-      if (response.ok) {
-        setSubmitStatus({ success: true, message: 'Message sent successfully!' });
-        setFormData({
-          name: '',
-          email: '',
-          message: '',
-        });
-        setErrors({});
-      } else {
-        setSubmitStatus({ success: false, message: 'Something went wrong. Please try again.' });
-      }
-    } catch {
-      // No need to use the error variable
-      setSubmitStatus({ success: false, message: 'Something went wrong. Please try again.' });
-    } finally {
+      // Reset the form
+      setFormData({
+        name: '',
+        email: '',
+        message: '',
+      });
+      setErrors({});
       setIsSubmitting(false);
-    }
+    }, 800); // Short delay to simulate processing
   };
 
   return (
@@ -200,8 +185,19 @@ const ContactForm = () => {
             </button>
             
             {submitStatus && (
-              <div className={`mt-4 p-3 rounded-md ${submitStatus.success ? 'bg-green-100 text-green-800 dark:bg-green-800/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-800/30 dark:text-red-400'}`}>
-                {submitStatus.message}
+              <div className={`mt-4 p-4 rounded-md bg-blue-50 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 border border-blue-200 dark:border-blue-800`}>
+                <p className="font-medium">{submitStatus.message}</p>
+                <div className="mt-2 flex flex-col sm:flex-row gap-2 text-sm">
+                  <a 
+                    href="mailto:shashank200801@gmail.com" 
+                    className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    shashank200801@gmail.com
+                  </a>
+                </div>
               </div>
             )}
           </form>
