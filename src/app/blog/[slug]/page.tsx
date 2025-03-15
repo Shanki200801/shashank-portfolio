@@ -9,6 +9,7 @@ interface BlogPageProps {
   params: {
     slug: string;
   };
+  searchParams?: Record<string, string | string[] | undefined>;
 }
 
 export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
