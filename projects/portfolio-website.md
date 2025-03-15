@@ -5,7 +5,7 @@ date: "2024-06-01"
 techStack: ["Next.js", "TypeScript", "Tailwind CSS", "React"]
 sourceLink: "https://github.com/shanki200801/portfolio-website"
 demoLink: "https://shashank-portfolio.vercel.app"
-image: "/images/portfolio.jpg"
+image: "/images/portfolio.jpeg"
 ---
 
 ## Project Details

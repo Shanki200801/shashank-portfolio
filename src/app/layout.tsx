@@ -10,6 +10,10 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Shashank | Portfolio",
   description: "Personal portfolio website of Shashank, a full-stack developer.",
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/favicon/apple-touch-icon.png',
+  },
 };
 
 export default function RootLayout({
