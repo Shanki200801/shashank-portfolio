@@ -5,14 +5,15 @@ import Link from 'next/link';
 import { FaGithub, FaExternalLinkAlt, FaArrowLeft } from 'react-icons/fa';
 import { Metadata } from 'next';
 
-interface ProjectPageProps {
-  params: {
-    slug: string;
-  };
-  searchParams?: Record<string, string | string[] | undefined>;
-}
+type ProjectParams = {
+  slug: string;
+};
 
-export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
+export async function generateMetadata({ 
+  params 
+}: { 
+  params: ProjectParams 
+}): Promise<Metadata> {
   const slug = params.slug;
   const { frontmatter } = getProjectData(`${slug}.md`);
   
@@ -30,7 +31,11 @@ export function generateStaticParams() {
   }));
 }
 
-export default async function ProjectPage({ params }: ProjectPageProps) {
+export default async function ProjectPage({ 
+  params 
+}: { 
+  params: ProjectParams 
+}) {
   const slug = params.slug;
   const { frontmatter, content } = getProjectData(`${slug}.md`);
   const { title, date, techStack, sourceLink, demoLink, image } = frontmatter;

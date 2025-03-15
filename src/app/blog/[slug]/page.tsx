@@ -5,14 +5,15 @@ import Link from 'next/link';
 import { FaArrowLeft } from 'react-icons/fa';
 import { Metadata } from 'next';
 
-interface BlogPageProps {
-  params: {
-    slug: string;
-  };
-  searchParams?: Record<string, string | string[] | undefined>;
-}
+type BlogParams = {
+  slug: string;
+};
 
-export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
+export async function generateMetadata({ 
+  params 
+}: { 
+  params: BlogParams 
+}): Promise<Metadata> {
   const slug = params.slug;
   const { frontmatter } = getBlogData(`${slug}.md`);
   
@@ -30,7 +31,11 @@ export function generateStaticParams() {
   }));
 }
 
-export default async function BlogPage({ params }: BlogPageProps) {
+export default async function BlogPage({ 
+  params 
+}: { 
+  params: BlogParams 
+}) {
   const slug = params.slug;
   const { frontmatter, content } = getBlogData(`${slug}.md`);
   const { title, date, image } = frontmatter;
