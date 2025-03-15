@@ -10,6 +10,14 @@ interface MarkdownRendererProps {
   content: string;
 }
 
+// Define the code component props type
+interface CodeProps {
+  inline?: boolean;
+  className?: string;
+  children: React.ReactNode;
+  [key: string]: any;
+}
+
 const MarkdownRenderer = ({ content }: MarkdownRendererProps) => {
   return (
     <div className="prose prose-lg dark:prose-invert max-w-none">
@@ -46,7 +54,7 @@ const MarkdownRenderer = ({ content }: MarkdownRendererProps) => {
             }
             return <a target="_blank" rel="noopener noreferrer" {...props} />;
           },
-          code: ({ inline, className, children, ...props }) => {
+          code: ({ inline, className, children, ...props }: CodeProps) => {
             if (inline) {
               return (
                 <code className="bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded text-sm" {...props}>

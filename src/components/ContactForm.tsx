@@ -96,7 +96,8 @@ const ContactForm = () => {
           message: data.message || 'Something went wrong. Please try again.',
         });
       }
-    } catch (err) {
+    } catch (_) {
+      // Using underscore to indicate intentionally unused variable
       setSubmitStatus({
         success: false,
         message: 'An error occurred. Please try again later.',
