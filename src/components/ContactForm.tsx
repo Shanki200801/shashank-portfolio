@@ -1,210 +1,295 @@
 "use client";
 
-import { useState } from 'react';
-import { FaPaperPlane } from 'react-icons/fa';
+import { useState } from "react";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
+import { FiAlertCircle, FiCheckCircle, FiMail, FiSend } from "react-icons/fi";
+import SectionHeading from "./SectionHeading";
 
 interface FormData {
   name: string;
   email: string;
   message: string;
+  website: string; // honeypot
 }
 
-interface FormErrors {
-  name?: string;
-  email?: string;
-  message?: string;
-}
+type FormErrors = Partial<Record<"name" | "email" | "message", string>>;
 
 interface SubmitStatus {
-  success?: boolean;
-  message?: string;
+  success: boolean;
+  message: string;
 }
 
+const EMPTY_FORM: FormData = { name: "", email: "", message: "", website: "" };
+
 const ContactForm = () => {
-  const [formData, setFormData] = useState<FormData>({
-    name: '',
-    email: '',
-    message: '',
-  });
+  const [formData, setFormData] = useState<FormData>(EMPTY_FORM);
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<SubmitStatus | null>(null);
 
-  const { name, email, message } = formData;
+  const { name, email, message, website } = formData;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-    
-    // Clear error for this field when user starts typing
-    if (errors[name as keyof FormErrors]) {
-      setErrors({
-        ...errors,
-        [name]: undefined,
-      });
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name: field, value } = e.target;
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    if (errors[field as keyof FormErrors]) {
+      setErrors((prev) => ({ ...prev, [field]: undefined }));
     }
   };
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
-    
-    if (!name.trim()) {
-      newErrors.name = 'Name is required';
-    }
-    
+    if (!name.trim()) newErrors.name = "Name is required";
     if (!email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = "Email is required";
     } else if (!/^\S+@\S+\.\S+$/.test(email)) {
-      newErrors.email = 'Email is invalid';
+      newErrors.email = "Email is invalid";
     }
-    
-    if (!message.trim()) {
-      newErrors.message = 'Message is required';
-    }
-    
+    if (!message.trim()) newErrors.message = "Message is required";
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    if (!validateForm()) {
-      return;
-    }
-    
+    if (!validateForm()) return;
+
     setIsSubmitting(true);
-    
-    // Instead of making an API call, just show a message after a short delay
-    setTimeout(() => {
-      setSubmitStatus({ 
-        success: true, 
-        message: 'Thanks for your interest! Until my email service is set up, please reach out to me directly at shashank200801@gmail.com or connect with me on LinkedIn or GitHub using the links on the left sidebar.' 
+    setSubmitStatus(null);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message, website }),
       });
-      
-      // Reset the form
-      setFormData({
-        name: '',
-        email: '',
-        message: '',
+      const data = await response.json();
+
+      if (!response.ok) {
+        setSubmitStatus({
+          success: false,
+          message: data.error ?? "Couldn't send the message. Please try again.",
+        });
+        return;
+      }
+
+      setSubmitStatus({
+        success: true,
+        message: data.message ?? "Message sent — I'll get back to you soon.",
       });
+      setFormData(EMPTY_FORM);
       setErrors({});
+    } catch {
+      setSubmitStatus({
+        success: false,
+        message: "Network error. Please try again, or email me directly.",
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 800); // Short delay to simulate processing
+    }
   };
 
   return (
-    <section id="contact" className="py-20 bg-white dark:bg-gray-900 relative z-10">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Get In Touch</h2>
-          <div className="w-20 h-1 bg-indigo-600 dark:bg-indigo-400 mx-auto"></div>
-          <p className="mt-4 text-lg text-gray-700 dark:text-gray-300">
-            Have a question or want to work together? Feel free to reach out!
-          </p>
-        </div>
-        
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 md:p-8">
-          <form onSubmit={handleSubmit} className="space-y-4">
+    <section id="contact" className="relative py-20">
+      <div className="container-page">
+        <SectionHeading
+          eyebrow="Contact"
+          title="Get In Touch"
+          description="Have a question, a role, or an idea worth building? Send it over — the form actually emails me."
+          align="center"
+        />
+
+        <div className="reveal mx-auto grid max-w-5xl gap-6 lg:grid-cols-[0.8fr_1.2fr]">
+          {/* Direct channels */}
+          <div className="surface flex flex-col justify-between rounded-2xl p-7">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium mb-1">
-                Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={name}
-                onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                  errors.name ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'
-                } bg-white dark:bg-gray-800`}
-                disabled={isSubmitting}
-              />
-              {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
+              <h3 className="font-semibold">Prefer something direct?</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted">
+                I read everything that lands in my inbox and usually reply within a
+                couple of days.
+              </p>
+
+              <div className="mt-6 space-y-3">
+                <a
+                  href="mailto:shashank200801@gmail.com"
+                  className="flex items-center gap-3 rounded-xl border border-line p-3 text-sm transition-colors hover:border-brand-400"
+                >
+                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-gradient-to-br from-brand-500/15 to-accent-500/15 text-brand-400">
+                    <FiMail className="h-4 w-4" />
+                  </span>
+                  <span className="truncate">shashank200801@gmail.com</span>
+                </a>
+
+                <a
+                  href="https://www.linkedin.com/in/shashank200801"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 rounded-xl border border-line p-3 text-sm transition-colors hover:border-brand-400"
+                >
+                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-gradient-to-br from-brand-500/15 to-accent-500/15 text-brand-400">
+                    <FaLinkedin className="h-4 w-4" />
+                  </span>
+                  LinkedIn
+                </a>
+
+                <a
+                  href="https://github.com/shanki200801"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 rounded-xl border border-line p-3 text-sm transition-colors hover:border-brand-400"
+                >
+                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-gradient-to-br from-brand-500/15 to-accent-500/15 text-brand-400">
+                    <FaGithub className="h-4 w-4" />
+                  </span>
+                  github.com/shanki200801
+                </a>
+              </div>
             </div>
-            
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium mb-1">
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={email}
-                onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                  errors.email ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'
-                } bg-white dark:bg-gray-800`}
-                disabled={isSubmitting}
-              />
-              {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
-            </div>
-            
-            <div>
-              <label htmlFor="message" className="block text-sm font-medium mb-1">
-                Message
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                value={message}
-                onChange={handleChange}
-                rows={5}
-                className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                  errors.message ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'
-                } bg-white dark:bg-gray-800`}
-                disabled={isSubmitting}
-              />
-              {errors.message && <p className="mt-1 text-sm text-red-500">{errors.message}</p>}
-            </div>
-            
-            <button
-              type="submit"
-              className="w-full flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? (
-                <span className="flex items-center">
-                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Sending...
-                </span>
-              ) : (
-                <span className="flex items-center">
-                  Send Message
-                  <FaPaperPlane className="ml-2" />
-                </span>
-              )}
-            </button>
-            
-            {submitStatus && (
-              <div className={`mt-4 p-4 rounded-md bg-blue-50 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 border border-blue-200 dark:border-blue-800`}>
-                <p className="font-medium">{submitStatus.message}</p>
-                <div className="mt-2 flex flex-col sm:flex-row gap-2 text-sm">
-                  <a 
-                    href="mailto:shashank200801@gmail.com" 
-                    className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    shashank200801@gmail.com
-                  </a>
+
+            <p className="mt-8 font-mono text-xs text-muted">Based in Bengaluru · IST (UTC+5:30)</p>
+          </div>
+
+          {/* Form */}
+          <div className="surface rounded-2xl p-7 sm:p-8">
+            <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+              <div className="grid gap-5 sm:grid-cols-2">
+                <div>
+                  <label htmlFor="name" className="mb-1.5 block text-sm font-medium">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={name}
+                    onChange={handleChange}
+                    placeholder="Ada Lovelace"
+                    className={`field ${errors.name ? "!border-red-500" : ""}`}
+                    disabled={isSubmitting}
+                  />
+                  {errors.name && <p className="mt-1.5 text-xs text-red-400">{errors.name}</p>}
+                </div>
+
+                <div>
+                  <label htmlFor="email" className="mb-1.5 block text-sm font-medium">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={email}
+                    onChange={handleChange}
+                    placeholder="you@company.com"
+                    className={`field ${errors.email ? "!border-red-500" : ""}`}
+                    disabled={isSubmitting}
+                  />
+                  {errors.email && <p className="mt-1.5 text-xs text-red-400">{errors.email}</p>}
                 </div>
               </div>
-            )}
-          </form>
+
+              <div>
+                <label htmlFor="message" className="mb-1.5 block text-sm font-medium">
+                  Message
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  value={message}
+                  onChange={handleChange}
+                  rows={6}
+                  placeholder="What are you working on?"
+                  className={`field resize-y ${errors.message ? "!border-red-500" : ""}`}
+                  disabled={isSubmitting}
+                />
+                {errors.message && (
+                  <p className="mt-1.5 text-xs text-red-400">{errors.message}</p>
+                )}
+              </div>
+
+              {/* Honeypot — hidden from humans, tempting to bots */}
+              <div className="hidden" aria-hidden="true">
+                <label htmlFor="website">Website</label>
+                <input
+                  type="text"
+                  id="website"
+                  name="website"
+                  value={website}
+                  onChange={handleChange}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </div>
+
+              <button type="submit" className="btn-primary w-full justify-center" disabled={isSubmitting}>
+                {isSubmitting ? (
+                  <>
+                    <svg
+                      className="h-4 w-4 animate-spin"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      />
+                    </svg>
+                    Sending…
+                  </>
+                ) : (
+                  <>
+                    Send Message
+                    <FiSend className="h-4 w-4" />
+                  </>
+                )}
+              </button>
+
+              {submitStatus && (
+                <div
+                  role="status"
+                  className={`flex items-start gap-3 rounded-xl border p-4 text-sm ${
+                    submitStatus.success
+                      ? "border-mint-400/30 bg-mint-400/10 text-mint-400"
+                      : "border-red-500/30 bg-red-500/10 text-red-400"
+                  }`}
+                >
+                  {submitStatus.success ? (
+                    <FiCheckCircle className="mt-0.5 h-4 w-4 shrink-0" />
+                  ) : (
+                    <FiAlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+                  )}
+                  <div>
+                    <p>{submitStatus.message}</p>
+                    {!submitStatus.success && (
+                      <a
+                        href="mailto:shashank200801@gmail.com"
+                        className="mt-1 inline-block underline underline-offset-2"
+                      >
+                        shashank200801@gmail.com
+                      </a>
+                    )}
+                  </div>
+                </div>
+              )}
+            </form>
+          </div>
         </div>
       </div>
     </section>
   );
 };
 
-export default ContactForm; 
+export default ContactForm;

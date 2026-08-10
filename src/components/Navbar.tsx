@@ -1,160 +1,179 @@
 "use client";
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useState } from 'react';
-import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
+import { FiFileText } from "react-icons/fi";
+import ThemeToggle from "./ThemeToggle";
+
+const navItems = [
+  { label: "Home", path: "/" },
+  { label: "Projects", path: "/projects" },
+  { label: "Blog", path: "/blog" },
+];
+
+const socialLinks = [
+  { name: "GitHub", url: "https://github.com/shanki200801", icon: <FaGithub className="h-5 w-5" /> },
+  { name: "LinkedIn", url: "https://www.linkedin.com/in/shashank200801", icon: <FaLinkedin className="h-5 w-5" /> },
+  { name: "Twitter", url: "https://twitter.com/shashank200801", icon: <FaTwitter className="h-5 w-5" /> },
+];
 
 const Navbar = () => {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
-  const navItems = [
-    { label: 'Home', path: '/' },
-    { label: 'Projects', path: '/projects' },
-    { label: 'Blog', path: '/blog' },
-  ];
+  const [scrolled, setScrolled] = useState(false);
 
-  const socialLinks = [
-    {
-      name: 'GitHub',
-      url: 'https://github.com/shanki200801',
-      icon: <FaGithub className="w-6 h-6" />,
-    },
-    {
-      name: 'LinkedIn',
-      url: 'https://www.linkedin.com/in/shashank200801',
-      icon: <FaLinkedin className="w-6 h-6" />,
-    },
-    {
-      name: 'Twitter',
-      url: 'https://twitter.com/shashank200801',
-      icon: <FaTwitter className="w-6 h-6" />,
-    },
-  ];
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-    // Prevent scrolling when menu is open
-    if (!isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-  };
+  // Never leave the body locked if the menu unmounts while open.
+  useEffect(() => {
+    document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMobileMenuOpen]);
+
+  const closeMenu = () => setIsMobileMenuOpen(false);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 shadow-sm">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex">
-            <div className="flex-shrink-0 flex items-center">
-              <Link href="/" className="text-xl font-bold text-gray-900 dark:text-white">
-                Shashank
-              </Link>
-            </div>
-          </div>
-          
-          <div className="flex items-center">
-            <div className="hidden md:ml-6 md:flex md:space-x-8">
-              {navItems.map((item) => (
+    <nav
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? "border-b border-line bg-[var(--bg)]/70 backdrop-blur-xl"
+          : "border-b border-transparent"
+      }`}
+    >
+      <div className="container-page">
+        <div className="flex h-16 items-center justify-between">
+          <Link href="/" className="group flex items-center gap-2.5" onClick={closeMenu}>
+            <span className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-brand-500 to-accent-500 font-mono text-sm font-bold text-white shadow-lg shadow-brand-500/25">
+              S
+            </span>
+            <span className="text-base font-semibold tracking-tight">
+              Shashank
+              <span className="text-brand-400">.</span>
+            </span>
+          </Link>
+
+          <div className="hidden items-center gap-1 md:flex">
+            {navItems.map((item) => {
+              const active =
+                item.path === "/" ? pathname === "/" : pathname.startsWith(item.path);
+              return (
                 <Link
                   key={item.path}
                   href={item.path}
-                  className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-                    pathname === item.path
-                      ? 'border-indigo-500 text-gray-900 dark:text-white'
-                      : 'border-transparent text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-700'
+                  className={`relative rounded-lg px-3.5 py-2 text-sm font-medium transition-colors ${
+                    active ? "text-[var(--text)]" : "text-muted hover:text-[var(--text)]"
                   }`}
                 >
                   {item.label}
+                  {active && (
+                    <span className="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-gradient-to-r from-brand-500 to-accent-500" />
+                  )}
                 </Link>
-              ))}
-              
-              <a
-                href="/resume.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-700"
-              >
-                Resume
-              </a>
-            </div>
+              );
+            })}
+
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ml-2 inline-flex items-center gap-1.5 rounded-lg border border-line bg-elevated/60 px-3.5 py-2 text-sm font-medium text-muted transition-colors hover:border-brand-400 hover:text-[var(--text)]"
+            >
+              <FiFileText className="h-4 w-4" />
+              Resume
+            </a>
+
+            <ThemeToggle className="ml-2" />
           </div>
-          
-          <div className="flex items-center md:hidden z-50">
+
+          <div className="flex items-center gap-2 md:hidden">
+            <ThemeToggle />
             <button
               type="button"
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+              className="relative z-50 grid h-9 w-9 place-items-center rounded-lg border border-line bg-elevated/60"
               aria-expanded={isMobileMenuOpen}
-              onClick={toggleMobileMenu}
+              aria-label="Toggle navigation menu"
+              onClick={() => setIsMobileMenuOpen((open) => !open)}
             >
-              <span className="sr-only">Open main menu</span>
-              <div className="relative w-6 h-6">
-                <span className={`absolute h-0.5 w-6 bg-current transform transition duration-300 ease-in-out ${isMobileMenuOpen ? 'rotate-45 translate-y-0' : '-translate-y-2'}`}></span>
-                <span className={`absolute h-0.5 w-6 bg-current transform transition duration-300 ease-in-out ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
-                <span className={`absolute h-0.5 w-6 bg-current transform transition duration-300 ease-in-out ${isMobileMenuOpen ? '-rotate-45 translate-y-0' : 'translate-y-2'}`}></span>
+              <div className="relative h-4 w-5">
+                <span
+                  className={`absolute left-0 h-0.5 w-5 rounded-full bg-current transition-all duration-300 ${
+                    isMobileMenuOpen ? "top-1/2 rotate-45" : "top-0.5"
+                  }`}
+                />
+                <span
+                  className={`absolute left-0 top-1/2 h-0.5 w-5 -translate-y-1/2 rounded-full bg-current transition-all duration-300 ${
+                    isMobileMenuOpen ? "opacity-0" : "opacity-100"
+                  }`}
+                />
+                <span
+                  className={`absolute left-0 h-0.5 w-5 rounded-full bg-current transition-all duration-300 ${
+                    isMobileMenuOpen ? "top-1/2 -rotate-45" : "bottom-0.5"
+                  }`}
+                />
               </div>
             </button>
           </div>
         </div>
       </div>
-      
-      {/* Mobile menu, slide in from right */}
-      <div 
-        className={`fixed inset-y-0 right-0 w-full bg-white dark:bg-gray-900 transform transition-transform duration-300 ease-in-out z-40 ${
-          isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
-        } md:hidden flex flex-col`}
+
+      {/* Mobile drawer */}
+      <div
+        className={`fixed inset-y-0 right-0 z-40 flex w-full flex-col bg-[var(--bg)]/95 backdrop-blur-xl transition-transform duration-300 ease-out md:hidden ${
+          isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
+        }`}
       >
-        <div className="px-4 pt-20 pb-6 flex-grow flex flex-col">
-          <div className="space-y-3">
-            {navItems.map((item) => (
-              <Link
-                key={item.path}
-                href={item.path}
-                className={`block px-3 py-3 rounded-md text-lg font-medium ${
-                  pathname === item.path
-                    ? 'bg-indigo-50 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-200'
-                    : 'text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800'
-                }`}
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  document.body.style.overflow = '';
-                }}
-              >
-                {item.label}
-              </Link>
-            ))}
-            
+        <div className="flex flex-grow flex-col px-6 pb-8 pt-24">
+          <div className="space-y-2">
+            {navItems.map((item) => {
+              const active =
+                item.path === "/" ? pathname === "/" : pathname.startsWith(item.path);
+              return (
+                <Link
+                  key={item.path}
+                  href={item.path}
+                  onClick={closeMenu}
+                  className={`block rounded-xl px-4 py-3.5 text-lg font-medium transition-colors ${
+                    active
+                      ? "border border-line bg-elevated text-[var(--text)]"
+                      : "text-muted hover:text-[var(--text)]"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
             <a
               href="/resume.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="block px-3 py-3 rounded-md text-lg font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800"
-              onClick={() => {
-                setIsMobileMenuOpen(false);
-                document.body.style.overflow = '';
-              }}
+              onClick={closeMenu}
+              className="flex items-center gap-2 rounded-xl px-4 py-3.5 text-lg font-medium text-muted"
             >
+              <FiFileText className="h-5 w-5" />
               Resume
             </a>
           </div>
-          
-          {/* Social links at the bottom of mobile menu */}
-          <div className="mt-auto pt-6 border-t border-gray-200 dark:border-gray-800">
-            <div className="flex justify-center space-x-8 py-4">
+
+          <div className="mt-auto border-t border-line pt-6">
+            <div className="flex justify-center gap-8 py-2">
               {socialLinks.map((link) => (
                 <a
                   key={link.name}
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors duration-200"
                   aria-label={link.name}
-                  onClick={() => {
-                    setIsMobileMenuOpen(false);
-                    document.body.style.overflow = '';
-                  }}
+                  onClick={closeMenu}
+                  className="p-2 text-muted transition-colors hover:text-brand-400"
                 >
                   {link.icon}
                 </a>
@@ -167,4 +186,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar; 
+export default Navbar;

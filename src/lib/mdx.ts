@@ -18,6 +18,7 @@ export interface BlogFrontmatter {
   date: string;
   description?: string;
   image?: string;
+  tags?: string[];
 }
 
 // Get all project files

@@ -1,95 +1,105 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
-import { ProjectFrontmatter } from '@/lib/mdx';
+import Image from "next/image";
+import Link from "next/link";
+import { FaGithub } from "react-icons/fa";
+import { FiArrowUpRight, FiExternalLink } from "react-icons/fi";
+import { ProjectFrontmatter } from "@/lib/mdx";
 
 interface ProjectCardProps {
   slug: string;
   frontmatter: ProjectFrontmatter;
+  index?: number;
 }
 
-const ProjectCard = ({ slug, frontmatter }: ProjectCardProps) => {
+const ProjectCard = ({ slug, frontmatter, index = 0 }: ProjectCardProps) => {
   const { title, description, date, techStack, sourceLink, demoLink, image } = frontmatter;
-  
-  // Format the date
-  const formattedDate = new Date(date).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
+
+  const formattedDate = new Date(date).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
   });
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg">
-      {image && (
-        <div className="relative h-48 w-full bg-gray-200 dark:bg-gray-800">
+    <article
+      className="reveal surface card-hover group flex h-full flex-col overflow-hidden rounded-2xl"
+      style={{ transitionDelay: `${index * 90}ms` }}
+    >
+      <Link href={`/projects/${slug}`} className="relative block h-44 overflow-hidden bg-subtle">
+        {image ? (
           <Image
             src={image}
             alt={title}
             fill
-            className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.06]"
             unoptimized
           />
-        </div>
-      )}
-      
-      <div className="p-6">
-        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{title}</h3>
-        
-        <p className="text-gray-500 dark:text-gray-400 text-sm mb-4">{formattedDate}</p>
-        
-        <p className="text-gray-700 dark:text-gray-300 mb-4">{description}</p>
-        
+        ) : (
+          <div className="h-full w-full bg-gradient-to-br from-brand-500/25 via-accent-500/15 to-transparent" />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-elevated)] via-transparent to-transparent opacity-70" />
+        <span className="absolute right-3 top-3 rounded-full bg-black/45 px-2.5 py-1 font-mono text-[11px] text-white backdrop-blur">
+          {formattedDate}
+        </span>
+      </Link>
+
+      <div className="flex flex-1 flex-col p-6">
+        <h3 className="text-lg font-semibold transition-colors group-hover:text-brand-400">
+          <Link href={`/projects/${slug}`}>{title}</Link>
+        </h3>
+
+        <p className="mt-2.5 line-clamp-3 text-sm leading-relaxed text-muted">{description}</p>
+
         {techStack && techStack.length > 0 && (
-          <div className="mb-4">
-            <div className="flex flex-wrap gap-2">
-              {techStack.map((tech) => (
-                <span
-                  key={tech}
-                  className="px-2 py-1 text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-md"
-                >
-                  {tech}
-                </span>
-              ))}
-            </div>
+          <div className="mb-6 mt-5 flex flex-wrap gap-1.5">
+            {techStack.slice(0, 5).map((tech) => (
+              <span key={tech} className="chip font-mono">
+                {tech}
+              </span>
+            ))}
+            {techStack.length > 5 && (
+              <span className="chip font-mono">+{techStack.length - 5}</span>
+            )}
           </div>
         )}
-        
-        <div className="flex items-center justify-between mt-4">
+
+        {/* mt-auto keeps the footer flush with the bottom of every card in a row */}
+        <div className="mt-auto flex items-center justify-between border-t border-line pt-4">
           <Link
             href={`/projects/${slug}`}
-            className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-medium"
+            className="inline-flex items-center gap-1 text-sm font-medium text-brand-400 transition-colors hover:text-accent-400"
           >
-            Read More
+            Read more
+            <FiArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </Link>
-          
-          <div className="flex space-x-4">
+
+          <div className="flex items-center gap-3">
             {sourceLink && (
               <a
                 href={sourceLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400"
-                aria-label="Source Code"
+                aria-label={`${title} source code`}
+                className="text-muted transition-colors hover:text-[var(--text)]"
               >
-                <FaGithub className="w-5 h-5" />
+                <FaGithub className="h-[18px] w-[18px]" />
               </a>
             )}
-            
             {demoLink && (
               <a
                 href={demoLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400"
-                aria-label="Live Demo"
+                aria-label={`${title} live demo`}
+                className="text-muted transition-colors hover:text-[var(--text)]"
               >
-                <FaExternalLinkAlt className="w-5 h-5" />
+                <FiExternalLink className="h-[18px] w-[18px]" />
               </a>
             )}
           </div>
         </div>
       </div>
-    </div>
+    </article>
   );
 };
 
-export default ProjectCard; 
+export default ProjectCard;

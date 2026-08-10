@@ -1,45 +1,32 @@
-"use client";
+import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
+import { FiMail } from "react-icons/fi";
 
-import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
+const socialLinks = [
+  { name: "GitHub", url: "https://github.com/shanki200801", icon: <FaGithub className="h-[18px] w-[18px]" /> },
+  { name: "LinkedIn", url: "https://www.linkedin.com/in/shashank200801", icon: <FaLinkedin className="h-[18px] w-[18px]" /> },
+  { name: "Twitter", url: "https://twitter.com/shashank200801", icon: <FaTwitter className="h-[18px] w-[18px]" /> },
+  { name: "Email", url: "mailto:shashank200801@gmail.com", icon: <FiMail className="h-[18px] w-[18px]" /> },
+];
 
-const Sidebar = () => {
-  const socialLinks = [
-    {
-      name: 'GitHub',
-      url: 'https://github.com/shanki200801',
-      icon: <FaGithub className="w-5 h-5" />,
-    },
-    {
-      name: 'LinkedIn',
-      url: 'https://www.linkedin.com/in/shashank200801',
-      icon: <FaLinkedin className="w-5 h-5" />,
-    },
-    {
-      name: 'Twitter',
-      url: 'https://twitter.com/shashank200801',
-      icon: <FaTwitter className="w-5 h-5" />,
-    },
-  ];
-
-  return (
-    <div className="fixed left-4 bottom-0 z-0 hidden md:block pointer-events-none">
-      <div className="flex flex-col items-center space-y-4">
-        {socialLinks.map((link) => (
-          <a
-            key={link.name}
-            href={link.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-2 text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors duration-200 pointer-events-auto"
-            aria-label={link.name}
-          >
-            {link.icon}
-          </a>
-        ))}
-        <div className="h-24 w-px bg-gray-300 dark:bg-gray-700"></div>
-      </div>
+/** Fixed social rail, desktop only. Sits below the page content in z-order. */
+const Sidebar = () => (
+  <aside className="pointer-events-none fixed bottom-0 left-5 z-30 hidden xl:block">
+    <div className="flex flex-col items-center gap-1">
+      {socialLinks.map((link) => (
+        <a
+          key={link.name}
+          href={link.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={link.name}
+          className="pointer-events-auto p-2.5 text-muted transition-all duration-200 hover:-translate-y-0.5 hover:text-brand-400"
+        >
+          {link.icon}
+        </a>
+      ))}
+      <div className="mt-3 h-24 w-px bg-gradient-to-b from-line to-transparent" />
     </div>
-  );
-};
+  </aside>
+);
 
-export default Sidebar; 
+export default Sidebar;

@@ -8,12 +8,23 @@ A modern, responsive portfolio website built with Next.js, React, and TypeScript
 
 - **Responsive Design**: Optimized for all device sizes
 - **Project Showcase**: Dynamic project cards with detailed project pages
-- **Blog Section**: Markdown-based blog with syntax highlighting
-- **Contact Form**: Client-side validated contact form with email redirection
-- **Dark Mode Support**: Built-in dark mode styling with CSS variables
-- **SEO Optimized**: Meta tags and structured data for better search visibility
+- **Blog Section**: Markdown-based blog with syntax highlighting and reading time
+- **Contact Form**: Really sends email via [Resend](https://resend.com), with validation and a bot honeypot
+- **Light & Dark Themes**: Token-driven palette with a persisted theme toggle (no flash on load)
+- **SEO**: Per-page metadata and canonicals, `sitemap.xml`, `robots.txt`, schema.org JSON-LD (Person, ProfilePage, BlogPosting, SoftwareSourceCode, BreadcrumbList) and generated 1200×630 Open Graph cards
 - **Fast Performance**: Optimized loading with Next.js App Router and React Server Components
 - **Type Safety**: Full TypeScript implementation
+
+## ⚙️ Environment variables
+
+Copy `.env.example` to `.env.local` and fill it in:
+
+| Variable | Required | Purpose |
+|---|---|---|
+| `NEXT_PUBLIC_SITE_URL` | recommended | Canonical origin for sitemap, canonicals and OG tags |
+| `RESEND_API_KEY` | for the contact form | Without it, `/api/contact` returns a clear 503 instead of pretending to send |
+| `CONTACT_TO_EMAIL` | optional | Defaults to `shashank200801@gmail.com` |
+| `CONTACT_FROM_EMAIL` | optional | Defaults to Resend's shared `onboarding@resend.dev` sender |
 
 ## 🛠️ Tech Stack
 

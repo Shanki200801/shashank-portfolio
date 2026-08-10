@@ -1,140 +1,286 @@
 import Image from "next/image";
-import Link from 'next/link';
-import { getAllProjects, getAllBlogs } from '@/lib/mdx';
-import ProjectCard from '@/components/ProjectCard';
-import BlogCard from '@/components/BlogCard';
-import ContactForm from '@/components/ContactForm';
+import Link from "next/link";
+import { FiArrowRight, FiDownload, FiMapPin } from "react-icons/fi";
+import { getAllProjects, getAllBlogs } from "@/lib/mdx";
+import ProjectCard from "@/components/ProjectCard";
+import BlogCard from "@/components/BlogCard";
+import ContactForm from "@/components/ContactForm";
+import SectionHeading from "@/components/SectionHeading";
+import TechMarquee from "@/components/TechMarquee";
+import Experience from "@/components/Experience";
+import Skills from "@/components/Skills";
+import JsonLd, { profilePageSchema } from "@/components/JsonLd";
+
+const stats = [
+  { value: "16+", label: "microservices migrated to Cloud Run" },
+  { value: "500/s", label: "req sustained in a zero-downtime DB migration" },
+  { value: "3", label: "platform modules architected end to end" },
+  { value: "2", label: "products built from scratch, in production" },
+];
 
 export default function Home() {
-  // Get the latest 3 projects and blogs
   const projects = getAllProjects().slice(0, 3);
   const blogs = getAllBlogs().slice(0, 3);
 
   return (
     <div>
-      {/* Hero Section */}
-      <section className="py-20 bg-white dark:bg-gray-900">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center justify-between">
-            <div className="md:w-1/2 mb-10 md:mb-0">
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-                Hi, I&apos;m <span className="text-indigo-600 dark:text-indigo-400">Shashank</span>
+      <JsonLd data={profilePageSchema} />
+
+      {/* ---------------- Hero ---------------- */}
+      <section className="relative overflow-hidden pb-16 pt-14 sm:pt-20">
+        <div className="container-page">
+          <div className="grid items-center gap-12 lg:grid-cols-[1.15fr_0.85fr]">
+            <div className="reveal is-visible">
+              <span className="inline-flex items-center gap-2 rounded-full border border-line bg-elevated/60 px-3 py-1.5 text-xs font-medium text-muted backdrop-blur">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-mint-400 opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-mint-400" />
+                </span>
+                Software Engineer @ Nimbly Technologies
+              </span>
+
+              <h1 className="mt-6 text-4xl font-bold leading-[1.08] sm:text-5xl lg:text-6xl">
+                Hi, I&apos;m <span className="gradient-text">Shashank</span>
+                <br />
+                I build systems that
+                <br className="hidden sm:block" /> hold up in production.
               </h1>
-              <p className="text-xl text-gray-700 dark:text-gray-300 mb-8">
-                Full Stack Developer with expertise in TypeScript, Java, Python, and C#.
-                Experienced in frameworks like Node.js, Spring Boot, Django, React, and Redux.
+
+              <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">
+                Backend-leaning full-stack engineer working on distributed, event-driven
+                systems and AI products. Lately: Go services, GCP Pub/Sub workflows, SAGA-based
+                consistency, and zero-downtime database migrations — plus the occasional
+                side project written purely to learn something new.
               </p>
-              <div className="flex flex-wrap gap-4">
-                <Link
-                  href="/projects"
-                  className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-md transition-colors duration-200"
-                >
+
+              <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted">
+                <span className="inline-flex items-center gap-1.5">
+                  <FiMapPin className="h-4 w-4 text-brand-400" />
+                  Bengaluru, India
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-brand-400" />
+                  M.Sc. Computer Science
+                </span>
+              </div>
+
+              <div className="mt-9 flex flex-wrap gap-3">
+                <Link href="/projects" className="btn-primary">
                   View Projects
+                  <FiArrowRight className="h-4 w-4" />
                 </Link>
-                <Link
-                  href="/#contact"
-                  className="px-6 py-3 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-medium rounded-md transition-colors duration-200"
-                >
+                <Link href="/#contact" className="btn-ghost">
                   Contact Me
                 </Link>
+                <a
+                  href="/resume.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-ghost"
+                >
+                  <FiDownload className="h-4 w-4" />
+                  Résumé
+                </a>
               </div>
             </div>
-            <div className="md:w-1/2 flex justify-center">
-              <div className="relative w-64 h-64 rounded-full overflow-hidden border-4 border-indigo-600 dark:border-indigo-400 bg-gray-200 dark:bg-gray-800">
-                <Image
-                  src="/images/profile.jpg"
-                  alt="Shashank"
-                  fill
-                  className="object-cover"
-                  priority
-                  unoptimized
-                />
+
+            {/* Portrait */}
+            <div className="flex justify-center lg:justify-end">
+              <div className="relative">
+                <div className="absolute -inset-6 rounded-full bg-gradient-to-tr from-brand-500/25 via-accent-500/20 to-mint-400/20 blur-3xl" />
+                <div className="relative">
+                  <div className="rounded-full bg-gradient-to-tr from-brand-500 via-accent-500 to-mint-400 p-[3px] shadow-2xl shadow-brand-500/20">
+                    <div className="relative h-60 w-60 overflow-hidden rounded-full bg-subtle sm:h-72 sm:w-72">
+                      <Image
+                        src="/images/profile.jpg"
+                        alt="Shashank"
+                        fill
+                        sizes="(max-width: 640px) 15rem, 18rem"
+                        className="object-cover"
+                        priority
+                        unoptimized
+                      />
+                    </div>
+                  </div>
+
+                  {/* Floating accent cards — pushed fully clear of the portrait */}
+                  <div className="surface absolute left-0 top-8 hidden -translate-x-[88%] rounded-xl px-3 py-2 shadow-xl lg:block">
+                    <p className="font-mono text-[11px] text-muted">go build ./...</p>
+                  </div>
+                  <div className="surface absolute bottom-10 right-0 hidden translate-x-[62%] rounded-xl px-3 py-2 shadow-xl lg:block">
+                    <p className="font-mono text-[11px] text-muted">
+                      <span className="text-mint-400">✓</span> deploy: cloud-run
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-16">
+            <TechMarquee />
+          </div>
+
+          {/* Stats */}
+          <div className="reveal mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {stats.map((stat) => (
+              <div key={stat.label} className="surface card-hover rounded-2xl p-5">
+                <p className="gradient-text font-mono text-3xl font-bold">{stat.value}</p>
+                <p className="mt-2 text-sm leading-snug text-muted">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ---------------- About ---------------- */}
+      <section id="about" className="py-20">
+        <div className="container-page">
+          <SectionHeading
+            eyebrow="About"
+            title="What I actually work on"
+            align="center"
+          />
+
+          <div className="reveal mx-auto grid max-w-5xl gap-6 lg:grid-cols-[1.4fr_1fr]">
+            <div className="surface rounded-2xl p-7 sm:p-9">
+              <div className="space-y-5 leading-relaxed text-muted">
+                <p>
+                  I&apos;m a software engineer at{" "}
+                  <span className="font-medium text-[var(--text)]">Nimbly Technologies</span>,
+                  where I work on the backend of a multi-tenant operations platform used by
+                  enterprise customers. Most of my day is spent on distributed systems
+                  problems: making event-driven workflows behave predictably, keeping data
+                  consistent across services, and moving production systems between
+                  databases and runtimes without anyone noticing.
+                </p>
+                <p>
+                  I built our Asset Tracker product from scratch in{" "}
+                  <span className="font-medium text-[var(--text)]">Go</span> — QR-based asset
+                  identification, automated audit workflows and cost analytics — and shipped a
+                  multi-tenant AI chatbot platform that turns natural language into real
+                  queries against customer data, with conversation memory and contextual
+                  retrieval. Before that I re-architected our bulk operations pipeline around
+                  the SAGA pattern so a distributed workflow that used to drift out of sync
+                  became atomic and recoverable.
+                </p>
+                <p>
+                  The through-line is depth over breadth: I like owning a system end to end —
+                  design, implementation, migration, and the on-call consequences. Outside of
+                  work I write Go and TypeScript side projects to learn things properly
+                  (a peer-to-peer encrypted transfer CLI, a daily research-and-writing
+                  platform), and I run long distances on trails.
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <div className="surface rounded-2xl p-7">
+                <h3 className="mb-4 font-mono text-xs uppercase tracking-[0.2em] text-brand-400">
+                  Education
+                </h3>
+                <div className="space-y-5">
+                  <div>
+                    <p className="font-medium">M.Sc. Computer Science</p>
+                    <p className="text-sm text-muted">St. Joseph&apos;s University</p>
+                    <p className="font-mono text-xs text-muted">2022 — 2024</p>
+                  </div>
+                  <div>
+                    <p className="font-medium">B.Sc. CS, Mathematics & Physics</p>
+                    <p className="text-sm text-muted">St. Joseph&apos;s College (Autonomous)</p>
+                    <p className="font-mono text-xs text-muted">2019 — 2022</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="surface rounded-2xl p-7">
+                <h3 className="mb-4 font-mono text-xs uppercase tracking-[0.2em] text-brand-400">
+                  Certifications
+                </h3>
+                <ul className="space-y-3 text-sm text-muted">
+                  <li className="flex gap-3">
+                    <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-accent-400" />
+                    AWS Academy Cloud Foundations
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-accent-400" />
+                    Scrum Fundamentals Certified — SCRUMstudy
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* About Section */}
-      <section className="py-20 bg-gray-50 dark:bg-gray-800">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">About Me</h2>
-            <div className="w-20 h-1 bg-indigo-600 dark:bg-indigo-400 mx-auto"></div>
-          </div>
-          <div className="max-w-3xl mx-auto">
-            <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">
-              I&apos;m a highly skilled full-stack developer with expertise in both front-end and back-end technologies. 
-              Proficient in languages such as TypeScript, Java, Python, and C#. Experienced in frameworks like 
-              Node.js (Express), Spring Boot, Django, Flask, React, and Redux.
-            </p>
-            <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">
-              I have a strong background in databases including MongoDB, PostgreSQL, and Redis Cache. 
-              I also have profound knowledge of cloud services like AWS and Google Cloud.
-            </p>
-            <p className="text-lg text-gray-700 dark:text-gray-300">
-              Currently working as a Full Stack Developer at Nimbly Technologies, where I&apos;ve streamlined bulk operations, 
-              implemented new features, and migrated from Firebase to MongoDB + AWS for enhanced scalability.
-            </p>
-          </div>
+      {/* ---------------- Experience ---------------- */}
+      <section id="experience" className="py-20">
+        <div className="container-page">
+          <SectionHeading
+            eyebrow="Career"
+            title="Experience"
+            description="Where I've worked and what I shipped there."
+          />
+          <Experience />
         </div>
       </section>
 
-      {/* Featured Projects Section */}
-      <section className="py-20 bg-white dark:bg-gray-900">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center mb-12">
-            <div>
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Featured Projects</h2>
-              <div className="w-20 h-1 bg-indigo-600 dark:bg-indigo-400"></div>
-            </div>
-            <Link
-              href="/projects"
-              className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-medium"
-            >
-              View All
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects.map((project) => (
+      {/* ---------------- Skills ---------------- */}
+      <section id="skills" className="py-20">
+        <div className="container-page">
+          <SectionHeading
+            eyebrow="Toolkit"
+            title="Technologies"
+            description="The stack I reach for, grouped by where it lives in the system."
+          />
+          <Skills />
+        </div>
+      </section>
+
+      {/* ---------------- Featured projects ---------------- */}
+      <section className="py-20">
+        <div className="container-page">
+          <SectionHeading
+            eyebrow="Work"
+            title="Featured Projects"
+            description="Things I built, mostly to solve a problem or learn a language properly."
+            action={{ label: "View all", href: "/projects" }}
+          />
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {projects.map((project, index) => (
               <ProjectCard
                 key={project.slug}
                 slug={project.slug}
                 frontmatter={project.frontmatter}
+                index={index}
               />
             ))}
           </div>
         </div>
       </section>
 
-      {/* Featured Blog Posts Section */}
-      <section className="py-20 bg-gray-50 dark:bg-gray-800">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center mb-12">
-            <div>
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Latest Blog Posts</h2>
-              <div className="w-20 h-1 bg-indigo-600 dark:bg-indigo-400"></div>
-            </div>
-            <Link
-              href="/blog"
-              className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-medium"
-            >
-              View All
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogs.map((blog) => (
+      {/* ---------------- Featured blog ---------------- */}
+      <section className="py-20">
+        <div className="container-page">
+          <SectionHeading
+            eyebrow="Writing"
+            title="Latest Posts"
+            description="Notes on engineering, focus, and running long distances."
+            action={{ label: "View all", href: "/blog" }}
+          />
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {blogs.map((blog, index) => (
               <BlogCard
                 key={blog.slug}
                 slug={blog.slug}
                 frontmatter={blog.frontmatter}
+                index={index}
               />
             ))}
           </div>
         </div>
       </section>
 
-      {/* Contact Form */}
       <ContactForm />
     </div>
   );

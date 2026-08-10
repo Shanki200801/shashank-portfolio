@@ -51,3 +51,6 @@ next-env.d.ts
 .Trashes
 ehthumbs.db
 Thumbs.db
+.env*
+# ...but keep the documented template, which holds no secrets
+!.env.example
