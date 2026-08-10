@@ -109,8 +109,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // globals.css sets `scroll-behavior: smooth`. From Next 16 the router no longer
+  // overrides that during navigation unless data-scroll-behavior is present.
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <JsonLd data={personSchema} />
