@@ -27,7 +27,7 @@ const MarkdownRenderer = ({ content }: MarkdownRendererProps) => (
           const imageSrc = src.startsWith('http') || src.startsWith('/') ? src : `/images/${src}`;
 
           return (
-            <span className="relative my-8 block aspect-[16/9] w-full overflow-hidden rounded-xl border border-line bg-subtle">
+            <span className="relative my-8 block aspect-[16/9] w-full overflow-hidden rounded-lg border border-line bg-subtle">
               <Image
                 src={imageSrc}
                 alt={alt || ''}
@@ -53,7 +53,7 @@ const MarkdownRenderer = ({ content }: MarkdownRendererProps) => (
           );
         },
         table: ({ children, ...props }) => (
-          <div className="my-6 overflow-x-auto rounded-xl border border-line">
+          <div className="my-6 overflow-x-auto rounded-lg border border-line">
             <table className="!my-0 w-full" {...props}>
               {children}
             </table>

@@ -6,10 +6,10 @@ export const contentType = OG_CONTENT_TYPE;
 
 export default function OpengraphImage() {
   return renderOgCard({
-    eyebrow: 'Software Engineer',
-    title: 'I build systems that hold up in production.',
+    eyebrow: 'Portfolio',
+    title: 'Shashank',
     description:
-      'Distributed, event-driven backends and AI products. Go, TypeScript, Python, GCP.',
+      'Software engineer in Bengaluru. I build web applications end to end, with a focus on reliable backend services in TypeScript and Node.js.',
     footer: 'shashank200801.vercel.app',
   });
 }

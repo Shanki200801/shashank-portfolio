@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { FaGithub, FaLinkedin } from "react-icons/fa";
-import { FiAlertCircle, FiCheckCircle, FiMail, FiSend } from "react-icons/fi";
 import SectionHeading from "./SectionHeading";
 
 interface FormData {
@@ -93,199 +91,136 @@ const ContactForm = () => {
   };
 
   return (
-    <section id="contact" className="relative py-20">
+    <section id="contact" className="py-16 sm:py-20">
       <div className="container-page">
         <SectionHeading
           eyebrow="Contact"
-          title="Get In Touch"
-          description="Have a question, a role, or an idea worth building? Send it over — the form actually emails me."
-          align="center"
+          title="Get in touch"
+          description="Questions, roles, or something you want built — this form emails me directly."
         />
 
-        <div className="reveal mx-auto grid max-w-5xl gap-6 lg:grid-cols-[0.8fr_1.2fr]">
-          {/* Direct channels */}
-          <div className="surface flex flex-col justify-between rounded-2xl p-7">
-            <div>
-              <h3 className="font-semibold">Prefer something direct?</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted">
-                I read everything that lands in my inbox and usually reply within a
-                couple of days.
-              </p>
-
-              <div className="mt-6 space-y-3">
-                <a
-                  href="mailto:shashank200801@gmail.com"
-                  className="flex items-center gap-3 rounded-xl border border-line p-3 text-sm transition-colors hover:border-brand-400"
-                >
-                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-gradient-to-br from-brand-500/15 to-accent-500/15 text-brand-400">
-                    <FiMail className="h-4 w-4" />
-                  </span>
-                  <span className="truncate">shashank200801@gmail.com</span>
-                </a>
-
-                <a
-                  href="https://www.linkedin.com/in/shashank200801"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 rounded-xl border border-line p-3 text-sm transition-colors hover:border-brand-400"
-                >
-                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-gradient-to-br from-brand-500/15 to-accent-500/15 text-brand-400">
-                    <FaLinkedin className="h-4 w-4" />
-                  </span>
-                  LinkedIn
-                </a>
-
-                <a
-                  href="https://github.com/shanki200801"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 rounded-xl border border-line p-3 text-sm transition-colors hover:border-brand-400"
-                >
-                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-gradient-to-br from-brand-500/15 to-accent-500/15 text-brand-400">
-                    <FaGithub className="h-4 w-4" />
-                  </span>
-                  github.com/shanki200801
-                </a>
-              </div>
-            </div>
-
-            <p className="mt-8 font-mono text-xs text-muted">Based in Bengaluru · IST (UTC+5:30)</p>
+        <div className="grid gap-10 md:grid-cols-[1fr_1.3fr]">
+          <div className="space-y-3 text-sm">
+            <p className="text-muted">
+              You can also reach me directly:
+            </p>
+            <p>
+              <a href="mailto:shashank200801@gmail.com" className="link-accent">
+                shashank200801@gmail.com
+              </a>
+            </p>
+            <p>
+              <a
+                href="https://www.linkedin.com/in/shashank200801"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link-accent"
+              >
+                LinkedIn
+              </a>
+              {" · "}
+              <a
+                href="https://github.com/shanki200801"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link-accent"
+              >
+                GitHub
+              </a>
+            </p>
+            <p className="font-mono text-xs text-muted">Bengaluru · IST (UTC+5:30)</p>
           </div>
 
-          {/* Form */}
-          <div className="surface rounded-2xl p-7 sm:p-8">
-            <form onSubmit={handleSubmit} className="space-y-5" noValidate>
-              <div className="grid gap-5 sm:grid-cols-2">
-                <div>
-                  <label htmlFor="name" className="mb-1.5 block text-sm font-medium">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={name}
-                    onChange={handleChange}
-                    placeholder="Ada Lovelace"
-                    className={`field ${errors.name ? "!border-red-500" : ""}`}
-                    disabled={isSubmitting}
-                  />
-                  {errors.name && <p className="mt-1.5 text-xs text-red-400">{errors.name}</p>}
-                </div>
-
-                <div>
-                  <label htmlFor="email" className="mb-1.5 block text-sm font-medium">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={email}
-                    onChange={handleChange}
-                    placeholder="you@company.com"
-                    className={`field ${errors.email ? "!border-red-500" : ""}`}
-                    disabled={isSubmitting}
-                  />
-                  {errors.email && <p className="mt-1.5 text-xs text-red-400">{errors.email}</p>}
-                </div>
+          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label htmlFor="name" className="mb-1.5 block text-sm">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={name}
+                  onChange={handleChange}
+                  className="field"
+                  disabled={isSubmitting}
+                />
+                {errors.name && <p className="mt-1.5 text-xs text-red-500">{errors.name}</p>}
               </div>
 
               <div>
-                <label htmlFor="message" className="mb-1.5 block text-sm font-medium">
-                  Message
+                <label htmlFor="email" className="mb-1.5 block text-sm">
+                  Email
                 </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  value={message}
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={email}
                   onChange={handleChange}
-                  rows={6}
-                  placeholder="What are you working on?"
-                  className={`field resize-y ${errors.message ? "!border-red-500" : ""}`}
+                  className="field"
                   disabled={isSubmitting}
                 />
-                {errors.message && (
-                  <p className="mt-1.5 text-xs text-red-400">{errors.message}</p>
-                )}
+                {errors.email && <p className="mt-1.5 text-xs text-red-500">{errors.email}</p>}
               </div>
+            </div>
 
-              {/* Honeypot — hidden from humans, tempting to bots */}
-              <div className="hidden" aria-hidden="true">
-                <label htmlFor="website">Website</label>
-                <input
-                  type="text"
-                  id="website"
-                  name="website"
-                  value={website}
-                  onChange={handleChange}
-                  tabIndex={-1}
-                  autoComplete="off"
-                />
-              </div>
-
-              <button type="submit" className="btn-primary w-full justify-center" disabled={isSubmitting}>
-                {isSubmitting ? (
-                  <>
-                    <svg
-                      className="h-4 w-4 animate-spin"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      />
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      />
-                    </svg>
-                    Sending…
-                  </>
-                ) : (
-                  <>
-                    Send Message
-                    <FiSend className="h-4 w-4" />
-                  </>
-                )}
-              </button>
-
-              {submitStatus && (
-                <div
-                  role="status"
-                  className={`flex items-start gap-3 rounded-xl border p-4 text-sm ${
-                    submitStatus.success
-                      ? "border-mint-400/30 bg-mint-400/10 text-mint-400"
-                      : "border-red-500/30 bg-red-500/10 text-red-400"
-                  }`}
-                >
-                  {submitStatus.success ? (
-                    <FiCheckCircle className="mt-0.5 h-4 w-4 shrink-0" />
-                  ) : (
-                    <FiAlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-                  )}
-                  <div>
-                    <p>{submitStatus.message}</p>
-                    {!submitStatus.success && (
-                      <a
-                        href="mailto:shashank200801@gmail.com"
-                        className="mt-1 inline-block underline underline-offset-2"
-                      >
-                        shashank200801@gmail.com
-                      </a>
-                    )}
-                  </div>
-                </div>
+            <div>
+              <label htmlFor="message" className="mb-1.5 block text-sm">
+                Message
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                value={message}
+                onChange={handleChange}
+                rows={5}
+                className="field resize-y"
+                disabled={isSubmitting}
+              />
+              {errors.message && (
+                <p className="mt-1.5 text-xs text-red-500">{errors.message}</p>
               )}
-            </form>
-          </div>
+            </div>
+
+            {/* Honeypot — hidden from humans, tempting to bots */}
+            <div className="hidden" aria-hidden="true">
+              <label htmlFor="website">Website</label>
+              <input
+                type="text"
+                id="website"
+                name="website"
+                value={website}
+                onChange={handleChange}
+                tabIndex={-1}
+                autoComplete="off"
+              />
+            </div>
+
+            <button type="submit" className="btn-primary" disabled={isSubmitting}>
+              {isSubmitting ? "Sending…" : "Send message"}
+            </button>
+
+            {submitStatus && (
+              <p
+                role="status"
+                className={`text-sm ${
+                  submitStatus.success ? "text-muted" : "text-red-500"
+                }`}
+              >
+                {submitStatus.message}
+                {!submitStatus.success && (
+                  <>
+                    {" "}
+                    <a href="mailto:shashank200801@gmail.com" className="link-accent">
+                      shashank200801@gmail.com
+                    </a>
+                  </>
+                )}
+              </p>
+            )}
+          </form>
         </div>
       </div>
     </section>

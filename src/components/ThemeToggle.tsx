@@ -25,7 +25,7 @@ const ThemeToggle = ({ className = "" }: { className?: string }) => {
       type="button"
       onClick={toggle}
       aria-label="Toggle colour theme"
-      className={`relative grid h-9 w-9 place-items-center rounded-lg border border-line bg-elevated/60 text-muted transition-colors hover:text-brand-400 ${className}`}
+      className={`grid h-9 w-9 place-items-center rounded-md border border-line text-muted transition-colors hover:text-[var(--text)] ${className}`}
     >
       <FiSun className="hidden h-4 w-4 dark:block" />
       <FiMoon className="h-4 w-4 dark:hidden" />

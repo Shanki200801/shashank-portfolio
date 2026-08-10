@@ -4,7 +4,6 @@ description: "A peer-to-peer encrypted file transfer CLI written in Go — one-t
 date: "2025-06-08"
 techStack: ["Go", "Cobra", "AES-256-GCM", "TCP", "Fly.io", "Docker", "GoReleaser"]
 sourceLink: "https://github.com/Shanki200801/qshare-cli"
-image: "/images/qshare.svg"
 ---
 
 ## Why I built it

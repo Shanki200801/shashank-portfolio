@@ -2,7 +2,6 @@
 title: "25 Minutes at a Time: How the Pomodoro Technique Fixed My Focus"
 date: "2026-08-05"
 description: "I didn't have a productivity problem. I had a starting problem, a context-switching problem, and a stopping problem. A kitchen timer fixed all three."
-image: "/images/pomodoro.svg"
 tags: ["focus", "productivity", "pomodoro", "habits", "engineering"]
 ---
 

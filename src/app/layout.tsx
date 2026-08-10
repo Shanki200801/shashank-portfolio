@@ -2,10 +2,7 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
-import PageCanvas from "@/components/PageCanvas";
-import Reveal from "@/components/Reveal";
 import JsonLd, { personSchema, websiteSchema } from "@/components/JsonLd";
 import { SITE, SITE_URL } from "@/lib/site";
 
@@ -24,7 +21,7 @@ const jetbrains = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Shashank — Software Engineer | Go, TypeScript & Distributed Systems",
+    default: "Shashank — Software Engineer",
     template: "%s | Shashank",
   },
   description: SITE.description,
@@ -87,12 +84,9 @@ export const metadata: Metadata = {
   },
 };
 
-// Runs before paint so the correct theme is applied without a flash. The `js`
-// class also gates the scroll-reveal animation, so content stays visible if
-// scripting is unavailable.
+// Runs before paint so the correct theme is applied without a flash.
 const themeScript = `
 (function () {
-  document.documentElement.classList.add('js');
   try {
     var stored = localStorage.getItem('theme');
     var dark = stored ? stored === 'dark'
@@ -119,10 +113,7 @@ export default function RootLayout({
         <JsonLd data={websiteSchema} />
       </head>
       <body className={`${inter.variable} ${jetbrains.variable} min-h-screen antialiased`}>
-        <PageCanvas />
-        <Reveal />
         <Navbar />
-        <Sidebar />
         <main className="pt-16">{children}</main>
         <Footer />
       </body>

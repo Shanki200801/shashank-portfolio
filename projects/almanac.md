@@ -5,7 +5,6 @@ date: "2026-08-02"
 techStack: ["Next.js", "TypeScript", "PostgreSQL", "Drizzle", "Better Auth", "Gemini", "Tailwind", "shadcn/ui", "Vercel"]
 sourceLink: "https://github.com/Shanki200801/Almanac-learn"
 demoLink: "https://almanac-learn.vercel.app"
-image: "/images/almanac.svg"
 ---
 
 ## The problem

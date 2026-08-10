@@ -81,33 +81,33 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         ])}
       />
 
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-3xl px-5 sm:px-8">
         <Link
           href="/projects"
-          className="group inline-flex items-center gap-2 text-sm font-medium text-muted transition-colors hover:text-brand-400"
+          className="group inline-flex items-center gap-2 text-sm font-medium text-muted transition-colors hover:text-[var(--text)]"
         >
           <FiArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
           Back to Projects
         </Link>
 
         <header className="mt-8">
-          <p className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.2em] text-brand-400">
+          <p className="inline-flex items-center gap-1.5 font-mono text-xs text-muted">
             <FiCalendar className="h-3.5 w-3.5" />
             {formattedDate}
           </p>
 
-          <h1 className="mt-4 text-3xl font-bold leading-tight sm:text-4xl md:text-5xl">
+          <h1 className="mt-4 text-3xl font-semibold leading-tight sm:text-4xl">
             {title}
           </h1>
 
           {description && (
-            <p className="mt-5 text-lg leading-relaxed text-muted">{description}</p>
+            <p className="mt-5 leading-relaxed text-muted">{description}</p>
           )}
 
           {techStack && techStack.length > 0 && (
             <div className="mt-6 flex flex-wrap gap-2">
               {techStack.map((tech) => (
-                <span key={tech} className="chip font-mono">
+                <span key={tech} className="chip">
                   {tech}
                 </span>
               ))}
@@ -132,7 +132,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           )}
 
           {image && (
-            <div className="relative mt-10 aspect-[16/9] w-full overflow-hidden rounded-2xl border border-line bg-subtle">
+            <div className="relative mt-10 aspect-[16/9] w-full overflow-hidden rounded-lg border border-line bg-subtle">
               <Image
                 src={image}
                 alt={title}
@@ -153,7 +153,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <div className="mt-14 border-t border-line pt-8">
           <Link
             href="/projects"
-            className="group inline-flex items-center gap-2 text-sm font-medium text-brand-400"
+            className="group inline-flex items-center gap-2 link-accent text-sm"
           >
             <FiArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
             All projects

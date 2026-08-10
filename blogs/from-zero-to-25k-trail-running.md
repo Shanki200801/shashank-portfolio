@@ -2,7 +2,6 @@
 title: "From Zero Athleticism to 25K Trail Runs"
 date: "2026-08-11"
 description: "I was the kid picked last for every team. Years later I ran 25 kilometres on trails and enjoyed it. This is what happened in between — and why runner's high is real."
-image: "/images/trail-running.svg"
 tags: ["running", "trail-running", "endurance", "health", "habits"]
 ---
 
