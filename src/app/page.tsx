@@ -9,40 +9,61 @@ import JsonLd, { profilePageSchema } from "@/components/JsonLd";
 
 const stack = [
   {
-    label: "Languages",
-    items: ["TypeScript", "JavaScript", "Python", "Java", "Go", "SQL", "C#", "Shell"],
+    label: "AI & LLMs",
+    items: [
+      "LLM agents",
+      "MCP servers",
+      "Gemini API",
+      "Claude Code (headless agents)",
+      "LLM-based testing & bug triage",
+      "Kokoro TTS",
+    ],
   },
   {
-    label: "Frameworks",
+    label: "Languages",
+    items: ["Go", "Python", "TypeScript", "JavaScript", "Java", "SQL", "Shell"],
+  },
+  {
+    label: "Backend",
     items: [
       "Node.js",
-      "Next.js",
-      "React",
-      "React Native",
-      "Redux",
       "Spring Boot",
       "Django",
       "Flask",
       "Prisma",
+      "REST",
+      "GraphQL",
+      "Microservices",
+      "Event-driven architecture",
+      "SAGA pattern",
     ],
   },
   {
-    label: "Data",
-    items: ["PostgreSQL", "MongoDB", "Redis", "Firebase", "Kafka"],
+    label: "Frontend",
+    items: ["React", "React Native", "Next.js", "Redux", "Tailwind CSS"],
   },
   {
-    label: "Cloud & tooling",
-    items: ["AWS", "GCP", "Docker", "Terraform", "CI/CD", "Git", "Linux", "REST", "GraphQL"],
+    label: "Data & cloud",
+    items: [
+      "PostgreSQL",
+      "MongoDB",
+      "Redis",
+      "Kafka",
+      "Supabase",
+      "Firebase",
+      "GCP (Cloud Run, Pub/Sub, Cloud Tasks)",
+      "AWS",
+    ],
   },
   {
-    label: "Testing",
-    items: ["Jest", "JUnit", "TDD"],
+    label: "DevOps & testing",
+    items: ["Docker", "Terraform", "GitHub Actions", "Linux", "Jest", "JUnit", "Mockito"],
   },
 ];
 
 const roles = [
   { title: "Software Engineer", company: "Nimbly Technologies", period: "2024 — Present" },
-  { title: "Project Engineer", company: "Crio.Do", period: "2024" },
+  { title: "Project Engineer (Contract)", company: "Crio.Do", period: "2024" },
   { title: "Software Development Intern", company: "Tata Consulting Engineers", period: "2021 — 2022" },
 ];
 
@@ -63,9 +84,9 @@ export default function Home() {
               <p className="mt-2 text-lg text-muted">Software Engineer</p>
 
               <p className="mt-6 leading-relaxed text-muted">
-                I build web applications end to end, with most of my focus on reliable,
-                scalable backend services in TypeScript and Node.js. Currently at Nimbly
-                Technologies, working on REST APIs and service integrations.
+                I build backend systems and AI features end to end: event-driven
+                microservices in Go, TypeScript and Python, and LLM agents and MCP servers
+                that put them to work. Currently at Nimbly Technologies.
               </p>
 
               <div className="mt-8 flex flex-wrap gap-3">
@@ -112,19 +133,21 @@ export default function Home() {
             <div className="max-w-2xl space-y-4 leading-relaxed text-muted">
               <p>
                 I&apos;m a software engineer with a Master&apos;s degree in Computer
-                Science. I work across a range of languages — TypeScript, JavaScript,
-                Python, Java, Go, SQL and C# — and across both front-end and back-end, with
-                a strong preference for building the parts that have to stay up.
+                Science. I work mostly in Go, Python and TypeScript, across both front-end
+                and back-end, with a strong preference for building the parts that have to
+                stay up.
               </p>
               <p>
-                In my current role I develop REST APIs in Node.js and TypeScript and
-                integrate them with the services around them. I work test-first where it
-                counts, writing unit tests that keep things reliable and maintainable
-                rather than just green.
+                At Nimbly I built a multi-tenant AI chatbot that uses LLM agents to turn
+                plain-English questions into data queries, and MCP servers that give AI
+                agents authenticated access to internal data and services. I also work on
+                the distributed backend underneath: Pub/Sub event flows, a SAGA-based bulk
+                operations system, and a zero-downtime MongoDB-to-PostgreSQL migration.
               </p>
               <p>
-                Along the way I&apos;ve built responsive web applications, backend servers,
-                and internal tools that take a tedious manual workflow and make it quick. I
+                Outside work I build AI pipelines and small tools that take a tedious
+                manual workflow and make it quick, such as a nightly AI video pipeline with
+                human approval, and Telegram approvals for my own automations. I
                 like collaborative teams — the work I&apos;m most proud of usually involved
                 unblocking someone else, or being unblocked by them.
               </p>
