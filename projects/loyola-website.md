@@ -2,10 +2,10 @@
 title: "Loyola College Website Redesign"
 description: "A modern, responsive redesign of the Loyola College website focusing on enhanced user experience and visual design"
 date: "2023-05-10"
-techStack: ["HTML5", "CSS3", "JavaScript", "Bootstrap", "Figma", "Responsive Design"]
+techStack: ["Next.js", "React", "Tailwind CSS", "Material UI", "GitHub Pages", "Figma"]
 sourceLink: "https://github.com/Shanki200801/LoyolaWebsite"
 demoLink: "https://shanki200801.github.io/LoyolaWebsite/"
-image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQuUlFfEz1i7Mu2H2pUEKt54MVhwH37H1NJw&s"
+image: "/images/loyola-website.png"
 ---
 
 ## Project Details
@@ -38,8 +38,8 @@ This project was implemented using modern front-end technologies with a focus on
 #### Development Highlights:
 
 - **Component-Based Approach**: Built reusable UI components for consistency
-- **CSS Architecture**: Implemented a scalable CSS structure using BEM methodology
-- **Responsive Framework**: Utilized Bootstrap grid system with custom modifications
+- **Styling**: Tailwind CSS utility classes with DaisyUI and Material UI components
+- **Static Deployment**: Prerendered with Next.js static export and deployed to GitHub Pages through GitHub Actions
 - **Cross-Browser Compatibility**: Ensured consistent experience across all major browsers
 - **Performance Optimization**: Minimized HTTP requests and optimized image loading
 - **Version Control**: Maintained clean Git workflow with feature branches
