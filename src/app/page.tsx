@@ -35,7 +35,6 @@ const stack = [
       "GraphQL",
       "Microservices",
       "Event-driven architecture",
-      "SAGA pattern",
     ],
   },
   {
@@ -57,7 +56,7 @@ const stack = [
   },
   {
     label: "DevOps & testing",
-    items: ["Docker", "Terraform", "GitHub Actions", "Linux", "Jest", "JUnit", "Mockito"],
+    items: ["Docker", "Terraform", "GitHub Actions", "Linux", "Jest", "JUnit", "Mockito", "Maestro"],
   },
 ];
 

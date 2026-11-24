@@ -52,6 +52,7 @@ export const SITE = {
     'Cloud Run',
     'Supabase',
     'Kafka',
+    'Maestro',
   ],
 } as const;
 
