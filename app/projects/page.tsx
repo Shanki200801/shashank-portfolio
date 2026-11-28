@@ -1,5 +1,5 @@
 import React from "react";
-import ProjectCounter from "./Projectcounter";
+import ProjectCounter from "./ProjectCounter";
 import ProjectGrid from "./ProjectGrid";
 
 async function getProjects() {
@@ -50,11 +50,12 @@ async function getRelevantProjectData() {
 
 const page = async () => {
   const projects = await getRelevantProjectData();
+  const counter = { count: projects.length };
   return (
     <article className="flex flex-col">
       <div className="flex">
         <h1 className="text-xl font-medium py-2">PROJECTS</h1>
-        <ProjectCounter />
+        <ProjectCounter count={projects.length} />
       </div>
       <ProjectGrid projects={projects} />
     </article>
